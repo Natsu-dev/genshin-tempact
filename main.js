@@ -47,7 +47,7 @@ cron.schedule('0 0 5 * * *', () => {
 // ログイン処理
 client.on('ready', () => {
     client.user.setStatus('online') //online, idle, dnd, invisible
-    client.user.setActivity('gt:info') //ステータスメッセージ
+    client.user.setActivity('gt:') //ステータスメッセージ
 
     console.log(`USER: ${client.user.username}`)
     console.log(`ID: ${client.user.id}`)
