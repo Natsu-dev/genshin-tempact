@@ -30,7 +30,7 @@ cron.schedule('0 0 5 * * *', () => {
     client.guilds.cache.forEach(guild => {
         new Promise(channel => {
             channel(guild.channels.cache
-                    .find(channel => channel.type === 'text'
+                    .find(channel => channel.type === 'GUILD_TEXT'
                         && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
                         && channel.name.indexOf('原神') > -1
                         && channel.name.indexOf('素材') > -1)
@@ -59,8 +59,7 @@ client.on('ready', () => {
     client.guilds.cache.forEach(guild => {
             console.log(`    ${guild.name}`)
             guild.channels.cache.forEach(channel => {
-                    console.log(`        ${channel.name}`)
-                    console.log(`        ${channel.name.indexOf('原神') > -1 && channel.name.indexOf('素材') > -1}`)
+                    console.log(`        ${channel.name} : ${channel.type === 'GUILD_TEXT' && channel.permissionsFor(guild.me).has('SEND_MESSAGES') && channel.name.indexOf('原神') > -1 && channel.name.indexOf('素材') > -1}`)
                 }
             )
         }
@@ -91,7 +90,7 @@ client.on('messageCreate', async message => {
 client.on("guildCreate", guild => {
     new Promise(channel => {
         channel(guild.channels.cache
-                .find(channel => channel.type === 'text'
+                .find(channel => channel.type === 'GUILD_TEXT'
                     && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
                     && channel.name.indexOf('原神') > -1
                     && channel.name.indexOf('素材') > -1)
