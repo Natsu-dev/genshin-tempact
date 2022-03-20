@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
 
-exports.createGreetingEmbed = () => {
+exports.createGreetingEmbed = () => new Promise((resolve, reject) => {
 
-    return new Discord.MessageEmbed()
+    resolve(new Discord.MessageEmbed()
         .setTitle('Genshin Tempact')
         .setColor('0x219ddd')
         .setDescription('Version ' + '1.0.0')
@@ -14,36 +14,19 @@ exports.createGreetingEmbed = () => {
         .addField(':ballot_box_with_check: Commands',
             `\`gt:info\`, \`gt:i\` このbotの説明が表示されます。`,
             false)
-}
+    )
+    reject('Error')
+})
 
-exports.createDailyEmbed = (week) => {
-    // TODO: ここもうちょい綺麗な実装ない？
-    const weekString = (w => {
-            switch (w) {
-                case 0:
-                    return '日曜日'
-                case 1:
-                    return '月曜日'
-                case 2:
-                    return '火曜日'
-                case 3:
-                    return '水曜日'
-                case 4:
-                    return '木曜日'
-                case 5:
-                    return '金曜日'
-                case 6:
-                    return '土曜日'
-            }
-        }
-    )(week) // 即時関数
+exports.createDailyEmbed = (day) => {
+    const dayString = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'][day]
+    const dayColor = ['RED', 'YELLOW', 'ORANGE', 'AQUA', 'GREEN', 'GOLD', 'BLURPLE'][day]
+    const dayImg = ['all', 'mon', 'tue', 'wed', 'mon', 'tue', 'wed'][day]
 
     return new Discord.MessageEmbed()
-        .setTitle(weekString + ' の素材一覧')
-        .setColor('0x219ddd')
+        .setTitle(dayString + ' の素材一覧')
+        .setColor(dayColor)
         .setDescription('日付とか入れる？')
         .setURL('https://github.com/Natsu-dev/genshin-tempact')
-        .addField(':ballot_box_with_check: About',
-            `画像を貼りますの感情`,
-            false)
+        .setImage(`https://github.com/Natsu-dev/genshin-tempact/imgs/${dayImg}.png`)
 }

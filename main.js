@@ -2,6 +2,8 @@ const {Client, Intents, Collection} = require('discord.js');
 const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES]});
 client.commands = new Collection();
 const prefix = 'gt:';
+
+const date = new Date()
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
@@ -34,11 +36,10 @@ cron.schedule('0 0 5 * * *', () => {
             )
         }).then(channel => {
             // TODO: weekをNumberで渡したいって話ね
-            channel.send(createDailyEmbed(0))
+            channel.send({embeds: [createDailyEmbed(date.getDay())]})
                 .then(r => console.log('Sent a greeting message.'))
         })
     })
-
 }, {
     scheduled: true,
     timezone: 'Asia/Tokyo'
@@ -60,36 +61,34 @@ client.on('ready', () => {
 })
 
 // コマンド処理
-client.on('message', async message => {
+client.on('messageCreate', async message => {
 
     // Botの書き込みと接頭辞のない書き込みは無視
     if (message.author.bot) return;
     if (message.content.indexOf(prefix) !== 0) return;
 
+    // content（メッセージ本文）をスペースで分割
     const args = message.content
         .slice(prefix.length)
         .trim()
         .split(/ +/g);
-    const command = args.shift().toLowerCase(); //引数
-    console.log(command)
+    const command = args.shift().toLowerCase(); //コマンド（小文字化）
+    console.log('Got command: ' + command)
     // -> command.js
     await client.commands.get('command').execute(client, command, args, message);
-
 })
 
 // サーバー参加時
 client.on("guildCreate", guild => {
-    client.guilds.cache.forEach(guild => {
-        new Promise(channel => {
-            channel(guild.channels.cache
-                .find(channel => channel.type === 'text'
-                    && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
-                    && channel.name.indexOf('原神武器天賦素材') > -1)
-            )
-        }).then(channel => {
-            channel.send(createGreetingEmbed())
-                .then(r => console.log('Sent a greeting message.'))
-        })
+    new Promise(channel => {
+        channel(guild.channels.cache
+            .find(channel => channel.type === 'text'
+                && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
+                && channel.name.indexOf('原神') > -1)
+        )
+    }).then(channel => {
+        channel.send({embeds: [createGreetingEmbed()]})
+            .then(r => console.log('Sent a greeting message.'))
     })
 })
 
