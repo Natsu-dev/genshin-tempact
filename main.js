@@ -30,13 +30,17 @@ cron.schedule('0 0 5 * * *', () => {
     client.guilds.cache.forEach(guild => {
         new Promise(channel => {
             channel(guild.channels.cache
-                .find(channel => channel.type === 'text'
-                    && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
-                    && /(^(?=.*原神)(?=.*素材))/.test(channel.name))
+                    .find(channel => channel.type === 'text'
+                        && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
+                        && channel.name.indexOf('原神') > -1
+                        && channel.name.indexOf('素材') > -1)
+                // TODO: /^(?=.*原神)(?=.*素材).*$/.test(channel.name)
             )
         }).then(channel => {
-            channel.send({embeds: [createDailyEmbed(date.getDay())]})
-                .then(r => console.log('Sent a greeting message.'))
+            if (channel) {
+                channel.send({embeds: [createDailyEmbed(date.getDay())]})
+                    .then(r => console.log('Sent a greeting message.'))
+            }
         })
     })
 }, {
@@ -52,8 +56,14 @@ client.on('ready', () => {
     console.log(`USER: ${client.user.username}`)
     console.log(`ID: ${client.user.id}`)
     console.log(`SERVERS:`)
-    client.guilds.cache.forEach(guild =>
-        console.log(`    ${guild.name}`)
+    client.guilds.cache.forEach(guild => {
+            console.log(`    ${guild.name}`)
+            guild.channels.cache.forEach(channel => {
+                    console.log(`        ${channel.name}`)
+                    console.log(`        ${channel.name.indexOf('原神') > -1 && channel.name.indexOf('素材') > -1}`)
+                }
+            )
+        }
     )
 
     console.log('ready...')
@@ -81,13 +91,18 @@ client.on('messageCreate', async message => {
 client.on("guildCreate", guild => {
     new Promise(channel => {
         channel(guild.channels.cache
-            .find(channel => channel.type === 'text'
-                && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
-                && /(^(?=.*原神)(?=.*素材))/.test(channel.name))
+                .find(channel => channel.type === 'text'
+                    && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
+                    && channel.name.indexOf('原神') > -1
+                    && channel.name.indexOf('素材') > -1)
+            // TODO: /^(?=.*原神)(?=.*素材).*$/.test(channel.name)
         )
     }).then(channel => {
-        channel.send({embeds: [createGreetingEmbed()]})
-            .then(r => console.log('Sent a greeting message.'))
+        console.log(channel)
+        if (channel) {
+            channel.send({embeds: [createGreetingEmbed()]})
+                .then(r => console.log('Sent a greeting message.'))
+        }
     })
 })
 
