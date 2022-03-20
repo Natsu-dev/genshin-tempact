@@ -32,10 +32,9 @@ cron.schedule('0 0 5 * * *', () => {
             channel(guild.channels.cache
                 .find(channel => channel.type === 'text'
                     && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
-                    && channel.name.indexOf('原神武器天賦素材') > -1)
+                    && /(^(?=.*原神)(?=.*素材))/.test(channel.name))
             )
         }).then(channel => {
-            // TODO: weekをNumberで渡したいって話ね
             channel.send({embeds: [createDailyEmbed(date.getDay())]})
                 .then(r => console.log('Sent a greeting message.'))
         })
@@ -84,7 +83,7 @@ client.on("guildCreate", guild => {
         channel(guild.channels.cache
             .find(channel => channel.type === 'text'
                 && channel.permissionsFor(guild.me).has('SEND_MESSAGES')
-                && channel.name.indexOf('原神') > -1)
+                && /(^(?=.*原神)(?=.*素材))/.test(channel.name))
         )
     }).then(channel => {
         channel.send({embeds: [createGreetingEmbed()]})
