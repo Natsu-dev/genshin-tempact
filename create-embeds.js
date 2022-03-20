@@ -26,7 +26,7 @@ exports.createDailyEmbed = (day) => {
     return new Discord.MessageEmbed()
         .setTitle(dayString + ' の素材一覧')
         .setColor(dayColor)
-        .setDescription('日付とか入れる？')
+        .setDescription(dayString + ' の素材一覧です。')
         .setURL('https://github.com/Natsu-dev/genshin-tempact')
-        .setImage(`https://github.com/Natsu-dev/genshin-tempact/imgs/${dayImg}.png`)
+        .setImage(`https://raw.githubusercontent.com/Natsu-dev/genshin-tempact/main/imgs/${dayImg}.png`)
 }
