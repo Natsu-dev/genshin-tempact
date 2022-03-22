@@ -3,7 +3,6 @@ const client = new Client({intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_M
 client.commands = new Collection();
 const prefix = 'gt:';
 
-const date = new Date()
 const fs = require('fs');
 const path = require('path');
 const cron = require('node-cron');
@@ -28,6 +27,7 @@ cron.schedule('0 0 5 * * *', () => {
 
     // 実行する関数
     client.guilds.cache.forEach(guild => {
+        const date = new Date()
         new Promise(channel => {
             channel(guild.channels.cache
                     .find(channel => channel.type === 'GUILD_TEXT'

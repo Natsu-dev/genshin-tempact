@@ -8,15 +8,12 @@ module.exports = {
     name: 'today',
     description: 'today',
     async execute(client, command, args, message) {
-        let argInt = parseInt(args[0])
-        // 引数なし
-        if (!args)
-            message.channel.send({embeds: [createDailyEmbed(date.getDay())]})
-        // 引数あり & 0~6
-        else if (argInt >= 0 && argInt <= 6)
-            message.channel.send({embeds: [createDailyEmbed(parseInt(args[0]))]})
-        // 不正な引数 -> デフォルト処理
-        else
-            message.channel.send({embeds: [createDailyEmbed(date.getDay())]})
+        let argInt =
+            args !== undefined ? date.getDay() // 引数なし
+                : (parseInt(args[0]) >= 0 && parseInt(args[0]) <= 6) ? parseInt(args[0]) // 引数あり & 0~6
+                    : date.getDay() // 不正な引数 -> デフォルト処理
+
+        message.channel.send({embeds: [createDailyEmbed(argInt)]})
+            .then(r => console.log('Sent today\'s message.'))
     }
 }
