@@ -23,5 +23,9 @@ module.exports = {
         if (command === 'item' || command === 'i') {
             await client.commands.get('item').execute(client, command, args, message);
         }
+        // Info (Greetingと同じ)
+        if (command === 'info') {
+            await client.commands.get('info').execute(client, command, args, message);
+        }
     }
 }
