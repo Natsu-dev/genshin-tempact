@@ -9,7 +9,7 @@ module.exports = {
     description: 'today',
     async execute(client, command, args, message) {
         let argInt =
-            args !== undefined ? date.getDay() // 引数なし
+            args === undefined ? date.getDay() // 引数なし
                 : (parseInt(args[0]) >= 0 && parseInt(args[0]) <= 6) ? parseInt(args[0]) // 引数あり & 0~6
                     : date.getDay() // 不正な引数 -> デフォルト処理
 
